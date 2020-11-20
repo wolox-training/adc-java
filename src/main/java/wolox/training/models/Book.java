@@ -18,94 +18,94 @@ public class Book {
     private long id;
     @NotNull
     @Column(nullable = false)
-    private String Genre;
+    private String genre;
     @NotNull
     @Column(nullable = false)
-    private String Author;
+    private String author;
     @NotNull
     @Column(nullable = false)
-    private String Image;
+    private String image;
     @NotNull
     @Column(nullable = false)
-    private String Title;
+    private String title;
     @NotNull
     @Column(nullable = false)
-    private String Subtitle;
+    private String subtitle;
     @NotNull
     @Column(nullable = false)
-    private String Publisher;
+    private String publisher;
     @NotNull
     @Column(nullable = false)
-    private String Year;
+    private String year;
     @NotNull
     @Column(nullable = false)
-    private int Pages;
+    private int pages;
     @NotNull
     @Column(nullable = false, unique = true)
     private String isbn;
 
     public String getGenre() {
-        return Genre;
+        return genre;
     }
 
     public void setGenre(String genre) {
-        Genre = genre;
+        genre = genre;
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        Author = author;
+        author = author;
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
     public void setImage(String image) {
-        Image = image;
+        image = image;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        title = title;
     }
 
     public String getSubtitle() {
-        return Subtitle;
+        return subtitle;
     }
 
     public void setSubtitle(String subtitle) {
-        Subtitle = subtitle;
+        subtitle = subtitle;
     }
 
     public String getPublisher() {
-        return Publisher;
+        return publisher;
     }
 
     public void setPublisher(String publisher) {
-        Publisher = publisher;
+        publisher = publisher;
     }
 
     public String getYear() {
-        return Year;
+        return year;
     }
 
     public void setYear(String year) {
-        Year = year;
+        year = year;
     }
 
     public int getPages() {
-        return Pages;
+        return pages;
     }
 
     public void setPages(int pages) {
-        Pages = pages;
+        pages = pages;
     }
 
     public String getIsbn() {
