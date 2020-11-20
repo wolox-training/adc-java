@@ -44,6 +44,14 @@ public class Book {
     @Column(nullable = false, unique = true)
     private String isbn;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getGenre() {
         return genre;
     }
