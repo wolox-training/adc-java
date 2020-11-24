@@ -3,7 +3,14 @@ package wolox.training.models;
 import com.sun.istack.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -27,11 +34,11 @@ public class User {
     @NotNull
     @Column(nullable = false)
     private LocalDate birthdate;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
-        return Collections.unmodifiableList(books);
+        return (List<Book>) Collections.unmodifiableList(books);
     }
 
     public void setBook(Book book) throws BookAlreadyOwnedException {

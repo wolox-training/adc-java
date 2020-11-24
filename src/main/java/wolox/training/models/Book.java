@@ -64,6 +64,21 @@ public class Book {
     @Column(nullable = false, unique = true)
     @ApiModelProperty(required = true, notes = "Isbn of the book", example = "8993-3232-7628-X")
     private String isbn;
+    @ManyToMany(mappedBy = "books")
+    private List<User> users = Collections.emptyList();
+
+    public List<User> getUsers() {
+        return (List<User>) Collections.unmodifiableList(users);
+    }
+
+    public void setUsers(User user) throws BookAlreadyOwnedException {
+        if (this.users.contains(user)) throw new BookAlreadyOwnedException();
+        this.users.add(user);
+    }
+
+    public boolean removeUser(User user) {
+        return users.remove(user);
+    }
 
     public long getId() {
         return id;
