@@ -3,6 +3,7 @@ package wolox.training.models;
 import com.sun.istack.NotNull;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import wolox.training.exceptions.BookAlreadyOwnedException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
