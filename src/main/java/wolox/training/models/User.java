@@ -27,7 +27,7 @@ public class User {
     @NotNull
     @Column(nullable = false)
     private LocalDate birthdate;
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
