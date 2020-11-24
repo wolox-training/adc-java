@@ -31,7 +31,7 @@ public class User {
     private List<Book> books = Collections.emptyList();
 
     public List<Book> getBooks() {
-        return Collections.unmodifiableList(books);
+        return (List<Book>) Collections.unmodifiableList(books);
     }
 
     public void setBook(Book book) throws BookAlreadyOwnedException {
