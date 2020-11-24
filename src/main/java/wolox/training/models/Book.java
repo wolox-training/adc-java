@@ -1,11 +1,11 @@
 package wolox.training.models;
 
 import com.sun.istack.NotNull;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import wolox.training.exceptions.BookAlreadyOwnedException;
+
+import javax.persistence.*;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 public class Book {
@@ -43,6 +43,21 @@ public class Book {
     @NotNull
     @Column(nullable = false, unique = true)
     private String isbn;
+    @ManyToMany(mappedBy = "books")
+    private List<User> users = Collections.emptyList();
+
+    public List<User> getUsers() {
+        return (List<User>) Collections.unmodifiableList(users);
+    }
+
+    public void setUsers(User user) throws BookAlreadyOwnedException {
+        if (this.users.contains(user)) throw new BookAlreadyOwnedException();
+        this.users.add(user);
+    }
+
+    public boolean removeUser(User user) {
+        return users.remove(user);
+    }
 
     public long getId() {
         return id;
