@@ -41,12 +41,7 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
-        try {
-            return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
+        return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
     /**
@@ -68,12 +63,7 @@ public class BookController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        try {
-            bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
+        bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         bookRepository.deleteById(id);
     }
 
@@ -86,12 +76,7 @@ public class BookController {
      */
     @PutMapping("/{id}")
     public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
-        try {
-            bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
+        bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         return bookRepository.save(book);
     }
 }
