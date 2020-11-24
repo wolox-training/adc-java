@@ -47,7 +47,7 @@ public class Book {
     private List<User> users = Collections.emptyList();
 
     public List<User> getUsers() {
-        return Collections.unmodifiableList(users);
+        return (List<User>) Collections.unmodifiableList(users);
     }
 
     public void setUsers(User user) throws BookAlreadyOwnedException {
