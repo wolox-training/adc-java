@@ -15,13 +15,14 @@ import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+import wolox.training.services.BookService;
 
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
 
     @Autowired
-    private BookRepository bookRepository;
+    private BookService bookService;
 
     /**
      * Method that gets all books
@@ -30,7 +31,7 @@ public class BookController {
      */
     @GetMapping
     public Iterable findAll() {
-        return bookRepository.findAll();
+        return bookService.findAll();
     }
 
     /**
@@ -41,12 +42,7 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
-        try {
-            return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
+        return bookService.findById(id);
     }
 
     /**
@@ -58,7 +54,7 @@ public class BookController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Book create(@RequestBody Book book) {
-        return bookRepository.save(book);
+        return bookService.save(book);
     }
 
     /**
@@ -68,13 +64,7 @@ public class BookController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        try {
-            bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
-        bookRepository.deleteById(id);
+        bookService.delete(id);
     }
 
     /**
@@ -85,13 +75,7 @@ public class BookController {
      * @return {@link Book}
      */
     @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
-        try {
-            bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        } catch (BookNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Book not found", e);
-        }
-        return bookRepository.save(book);
+    public Book update(@RequestBody Book book, @PathVariable Long id) {
+        return bookService.update(book, id);
     }
 }

@@ -10,16 +10,14 @@ import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
+import wolox.training.services.UserService;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
+    private UserService userService;
 
     /**
      * Method that gets all users
@@ -28,7 +26,7 @@ public class UserController {
      */
     @GetMapping
     public Iterable<User> findAll() {
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     /**
@@ -39,7 +37,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public User findById(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return userService.findById(id);
     }
 
     /**
@@ -51,7 +49,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User save(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.create(user);
     }
 
     /**
@@ -63,8 +61,7 @@ public class UserController {
      */
     @PutMapping("/{id}")
     public User update(@RequestBody User user, @PathVariable Long id) {
-        User userFound = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        return userRepository.save(user);
+        return userService.update(user, id);
     }
 
     /**
@@ -74,12 +71,7 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-
-        userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-
-        userRepository.deleteById(id);
-
+        userService.delete(id);
     }
 
     /**
@@ -91,17 +83,7 @@ public class UserController {
      */
     @PutMapping("/{idUser}/books/{idBook}")
     public User addBook(@PathVariable Long idUser, @PathVariable Long idBook) {
-
-        User userFound = userRepository.findById(idUser)
-                .orElseThrow(UserNotFoundException::new);
-
-        Book bookFound = bookRepository.findById(idBook)
-                .orElseThrow(BookNotFoundException::new);
-
-        userFound.setBook(bookFound);
-
-        return userRepository.save(userFound);
-
+        return userService.addBook(idUser, idBook);
     }
 
     /**
@@ -113,17 +95,7 @@ public class UserController {
      */
     @DeleteMapping("/{idUser}/books/{idBook}")
     public User removeBook(@PathVariable Long idUser, @PathVariable Long idBook) {
-
-        User userFound = userRepository.findById(idUser)
-                .orElseThrow(UserNotFoundException::new);
-
-        Book bookFound = bookRepository.findById(idBook)
-                .orElseThrow(BookNotFoundException::new);
-
-        userFound.removeBook(bookFound);
-
-        return userRepository.save(userFound);
-
+        return userService.removeBook(idUser, idBook);
     }
 
 }
