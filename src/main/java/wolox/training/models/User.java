@@ -15,6 +15,9 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 @Table(name = "users")
 @Entity
 public class User {
@@ -25,15 +28,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
+
     @NotNull
     @Column(nullable = false)
     private String username;
+
     @NotNull
     @Column(nullable = false)
     private String name;
+
     @NotNull
     @Column(nullable = false)
     private LocalDate birthdate;
+
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private List<Book> books = Collections.emptyList();
 
@@ -63,6 +70,7 @@ public class User {
     }
 
     public void setUsername(String username) {
+        checkNotNull(username, "Please check username field, its null");
         this.username = username;
     }
 
@@ -71,6 +79,7 @@ public class User {
     }
 
     public void setName(String name) {
+        checkNotNull(name, "Please check name field, its null");
         this.name = name;
     }
 
@@ -79,6 +88,9 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        checkNotNull(birthdate, "Please check birthdate field, its null");
+        checkArgument(birthdate.isBefore(LocalDate.now()),
+                "Please check birthdate field, its can't be today or greater than today");
         this.birthdate = birthdate;
     }
 }
