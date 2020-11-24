@@ -3,7 +3,13 @@ package wolox.training.models;
 import com.sun.istack.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
