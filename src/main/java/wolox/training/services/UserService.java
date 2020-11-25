@@ -32,6 +32,7 @@ public class UserService {
 
     public User update(User user, Long id) {
         userRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        user.setId(id);
         return userRepository.save(user);
     }
 

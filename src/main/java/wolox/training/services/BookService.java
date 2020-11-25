@@ -26,6 +26,7 @@ public class BookService {
 
     public Book update(Book book, Long id) {
         bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
+        book.setId(id);
         return bookRepository.save(book);
     }
 
