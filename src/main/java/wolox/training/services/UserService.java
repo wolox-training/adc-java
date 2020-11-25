@@ -43,7 +43,7 @@ public class UserService {
     public User addBook(Long idUser, Long idBook) {
         User userFound = userRepository.findById(idUser).orElseThrow(UserNotFoundException::new);
         Book bookFound = bookRepository.findById(idBook).orElseThrow(BookNotFoundException::new);
-        userFound.setBook(bookFound);
+        userFound.addBook(bookFound);
         return userRepository.save(userFound);
     }
 

@@ -82,7 +82,11 @@ public class Book {
         return (List<User>) Collections.unmodifiableList(users);
     }
 
-    public void setUsers(User user) throws BookAlreadyOwnedException {
+    public void addUser(List<User> users) {
+        this.users = users;
+    }
+
+    public void addUser(User user) throws BookAlreadyOwnedException {
         if (this.users.contains(user)) throw new BookAlreadyOwnedException();
         this.users.add(user);
     }
