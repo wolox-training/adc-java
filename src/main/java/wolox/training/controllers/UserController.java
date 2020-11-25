@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.models.Book;
+import wolox.training.models.PasswordReset;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
@@ -19,9 +20,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     /**
      * Method that gets all users
@@ -53,7 +51,6 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User save(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.create(user);
     }
 
@@ -67,6 +64,17 @@ public class UserController {
     @PutMapping("/{id}")
     public User update(@RequestBody User user, @PathVariable Long id) {
         return userService.update(user, id);
+    }
+
+    /**
+     * Password update method
+     *
+     * @param id:        User identifier (Long)
+     * @param passwords: Password request ({@link PasswordReset})
+     */
+    @PutMapping("/{id}/password")
+    public void passwordReset(@PathVariable Long id, @RequestBody PasswordReset passwords) {
+        userService.passwordReset(id, passwords);
     }
 
     /**
