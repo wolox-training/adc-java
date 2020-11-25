@@ -2,6 +2,7 @@ package wolox.training.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookNotFoundException;
@@ -18,6 +19,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Method that gets all users
@@ -49,6 +53,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User save(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userService.create(user);
     }
 

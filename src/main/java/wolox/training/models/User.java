@@ -35,6 +35,10 @@ public class User {
 
     @NotNull
     @Column(nullable = false)
+    private String password;
+
+    @NotNull
+    @Column(nullable = false)
     private String name;
 
     @NotNull
@@ -76,6 +80,15 @@ public class User {
     public void setUsername(String username) {
         checkNotNull(username, "Please check username field, its null");
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        checkNotNull(password, "Please check password field, its null");
+        this.password = password;
     }
 
     public String getName() {
