@@ -1,5 +1,8 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +33,10 @@ public class BookController {
      * @return all {@link Book}
      */
     @GetMapping
+    @ApiOperation(value = "Return all books", response = Book.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved all books")
+    })
     public Iterable findAll() {
         return bookService.findAll();
     }
