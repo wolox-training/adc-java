@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -159,6 +160,8 @@ public class Book {
 
     public void setYear(String year) {
         checkNotNull(year, "Please check year field, its null");
+        checkArgument(LocalDate.ofYearDay(Integer.parseInt(year), 1).isBefore(LocalDate.now()),
+                "Please check year field, its can't be today or greater than today");
         year = year;
     }
 
