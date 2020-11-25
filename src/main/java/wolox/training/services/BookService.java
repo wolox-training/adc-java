@@ -2,6 +2,7 @@ package wolox.training.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
@@ -25,8 +26,10 @@ public class BookService {
     }
 
     public Book update(Book book, Long id) {
+        if (book.getId() != id) {
+            throw new BookIdMismatchException();
+        }
         bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        book.setId(id);
         return bookRepository.save(book);
     }
 

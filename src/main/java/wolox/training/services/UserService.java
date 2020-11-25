@@ -3,6 +3,7 @@ package wolox.training.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.models.User;
@@ -31,8 +32,10 @@ public class UserService {
     }
 
     public User update(User user, Long id) {
+        if (user.getId() != id) {
+            throw new UserIdMismatchException();
+        }
         userRepository.findById(id).orElseThrow(BookNotFoundException::new);
-        user.setId(id);
         return userRepository.save(user);
     }
 
