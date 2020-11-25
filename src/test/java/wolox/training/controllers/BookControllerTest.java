@@ -2,6 +2,7 @@ package wolox.training.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.services.BookService;
 
@@ -84,6 +86,15 @@ class BookControllerTest {
     }
 
     @Test
+    void whenFindById_thenReturnNotFound() throws Exception {
+        when(bookService.findById(any())).thenThrow(BookNotFoundException.class);
+        mockMvc.perform(get(BOOK_PATH + "/{id}", BOOK_ID)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
     void whenSave_thenReturnSavedBook() throws Exception {
         when(bookService.save(any())).thenReturn(bookTest);
         mockMvc.perform(post(BOOK_PATH)
@@ -114,12 +125,31 @@ class BookControllerTest {
     }
 
     @Test
+    void whenUpdate_thenReturnNotFound() throws Exception {
+        when(bookService.update(any(), any())).thenThrow(BookNotFoundException.class);
+        mockMvc.perform(put(BOOK_PATH + "/{id}", BOOK_ID)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(bookTest)))
+                .andDo(print()).andExpect(status().isNotFound());
+    }
+
+    @Test
     void whenDelete_thenReturnIsOk() throws Exception {
         doNothing().when(bookService).delete(any());
         mockMvc.perform(delete(BOOK_PATH + "/{id}", BOOK_ID)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    void whenDelete_thenReturnNotFound() throws Exception {
+        doThrow(BookNotFoundException.class).when(bookService).delete(any());
+        mockMvc.perform(delete(BOOK_PATH + "/{id}", BOOK_ID)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print()).andExpect(status().isNotFound());
     }
 
 }
