@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,6 +62,7 @@ class BookControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(Collections.singleton(bookTest))))
                 .andExpect(jsonPath("[0].genre").value(bookTest.getGenre()))
                 .andExpect(jsonPath("[0].author").value(bookTest.getAuthor()))
                 .andExpect(jsonPath("[0].title").value(bookTest.getTitle()))
@@ -74,6 +76,7 @@ class BookControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(bookTest)))
                 .andExpect(jsonPath("publisher").value(bookTest.getPublisher()))
                 .andExpect(jsonPath("year").value(bookTest.getYear()))
                 .andExpect(jsonPath("pages").value(bookTest.getPages()))
@@ -88,6 +91,7 @@ class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(bookTest)))
                 .andDo(print()).andExpect(status().isCreated())
+                .andExpect(content().json(objectMapper.writeValueAsString(bookTest)))
                 .andExpect(jsonPath("genre").value(bookTest.getGenre()))
                 .andExpect(jsonPath("author").value(bookTest.getAuthor()))
                 .andExpect(jsonPath("title").value(bookTest.getTitle()))
@@ -102,6 +106,7 @@ class BookControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(bookTest)))
                 .andDo(print()).andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(bookTest)))
                 .andExpect(jsonPath("genre").value(bookTest.getGenre()))
                 .andExpect(jsonPath("author").value(bookTest.getAuthor()))
                 .andExpect(jsonPath("title").value(bookTest.getTitle()))
