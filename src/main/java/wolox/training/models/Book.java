@@ -109,7 +109,7 @@ public class Book {
 
     public void setGenre(String genre) {
         checkNotNull(genre, "Please check genre field, its null");
-        genre = genre;
+        this.genre = genre;
     }
 
     public String getAuthor() {
@@ -118,7 +118,7 @@ public class Book {
 
     public void setAuthor(String author) {
         checkNotNull(author, "Please check author field, its null");
-        author = author;
+        this.author = author;
     }
 
     public String getImage() {
@@ -127,7 +127,7 @@ public class Book {
 
     public void setImage(String image) {
         checkNotNull(image, "Please check image field, its null");
-        image = image;
+        this.image = image;
     }
 
     public String getTitle() {
@@ -136,7 +136,7 @@ public class Book {
 
     public void setTitle(String title) {
         checkNotNull(title, "Please check title field, its null");
-        title = title;
+        this.title = title;
     }
 
     public String getSubtitle() {
@@ -145,7 +145,7 @@ public class Book {
 
     public void setSubtitle(String subtitle) {
         checkNotNull(subtitle, "Please check subtitle field, its null");
-        subtitle = subtitle;
+        this.subtitle = subtitle;
     }
 
     public String getPublisher() {
@@ -154,7 +154,7 @@ public class Book {
 
     public void setPublisher(String publisher) {
         checkNotNull(publisher, "Please check publisher field, its null");
-        publisher = publisher;
+        this.publisher = publisher;
     }
 
     public String getYear() {
@@ -163,7 +163,7 @@ public class Book {
 
     public void setYear(String year) {
         checkNotNull(year, "Please check year field, its null");
-        year = year;
+        this.year = year;
     }
 
     public int getPages() {
@@ -173,7 +173,7 @@ public class Book {
     public void setPages(int pages) {
         checkArgument(pages > MINIMUM_AMOUNT_OF_PAGES,
                 "Please check pages field, its can't be 20 or less than 20");
-        pages = pages;
+        this.pages = pages;
     }
 
     public String getIsbn() {
