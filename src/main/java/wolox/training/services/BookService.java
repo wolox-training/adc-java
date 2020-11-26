@@ -1,11 +1,17 @@
 package wolox.training.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.mappers.BookMapper;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -13,7 +19,16 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public Iterable<Book> findAll() {
+    @Autowired
+    private OpenLibraryDelegate openLibraryDelegate;
+
+    @Autowired
+    private BookMapper bookMapper;
+
+    public Iterable<Book> findAll(String isbn) {
+        if (StringUtils.isNotEmpty(isbn)) {
+            return filterBookByIsbn(isbn);
+        }
         return bookRepository.findAll();
     }
 
@@ -36,5 +51,20 @@ public class BookService {
     public void delete(Long id) {
         bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
         bookRepository.deleteById(id);
+    }
+
+
+
+    private Iterable<Book> filterBookByIsbn(String isbn) {
+        Optional<Book> bookOptional = bookRepository.findByIsbn(isbn);
+        if (bookOptional.isPresent()) {
+            return Collections.singleton(bookOptional.get());
+        }
+
+        Book bookFound = openLibraryDelegate.findBookByIsbn(isbn)
+                .map(bookInfoDto -> bookMapper.bookInfoDtoToToEntity(isbn, bookInfoDto))
+                .orElseThrow(BookNotFoundException::new);
+
+        return Collections.singleton(bookRepository.save(bookFound));
     }
 }
