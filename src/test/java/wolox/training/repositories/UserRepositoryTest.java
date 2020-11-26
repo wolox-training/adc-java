@@ -17,6 +17,7 @@ import wolox.training.models.User;
 class UserRepositoryTest {
 
     private static final String USERNAME = "test.username";
+    private static final String PASSWORD = "WeRtYuIo++";
 
     private User userToSave;
 
@@ -28,6 +29,7 @@ class UserRepositoryTest {
         userToSave = new User();
         userToSave.setUsername(USERNAME);
         userToSave.setName("Test");
+        userToSave.setPassword(PASSWORD);
         userToSave.setBirthdate(LocalDate.now().minusDays(1));
 
         userRepository.save(userToSave);
@@ -86,6 +88,29 @@ class UserRepositoryTest {
         // Assert
         assertThat(users.iterator().hasNext()).isFalse();
 
+    }
+
+    @Test
+    void whenFindBetweenTwoDate_thenReturnUserList() {
+
+        String name = "Gerardo Antonio";
+
+        userToSave = new User();
+        userToSave.setUsername(USERNAME);
+        userToSave.setName(name);
+        userToSave.setPassword(PASSWORD);
+        userToSave.setBirthdate(LocalDate.now().minusDays(3));
+
+        userRepository.save(userToSave);
+
+        List<User> users = userRepository
+                .findByBirthdateLessThanEqualAndBirthdateGreaterThanEqualAndNameContainingIgnoreCase(
+                        LocalDate.now(), LocalDate.now().minusDays(5), "gerar");
+
+        assertThat(users.isEmpty()).isFalse();
+        assertThat(users.size()).isEqualTo(1);
+        assertThat(users.get(0).getName()).isEqualTo(name);
+        assertThat(users.get(0).getUsername()).isEqualTo(userToSave.getUsername());
     }
 
 }
