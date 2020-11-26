@@ -3,6 +3,7 @@ package wolox.training.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import wolox.training.authentication.IAuthentication;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
@@ -24,6 +25,13 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IAuthentication authentication;
+
+    public String authenticatedCurrentUser() {
+        return authentication.getAuthentication().getName();
+    }
 
     public Iterable<User> findAll() {
         return userRepository.findAll();

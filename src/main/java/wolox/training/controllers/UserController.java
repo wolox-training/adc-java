@@ -22,6 +22,16 @@ public class UserController {
     private UserService userService;
 
     /**
+     * Method that gets authenticated user
+     *
+     * @return username (String)
+     */
+    @GetMapping("/me")
+    public String authenticatedCurrentUser() {
+        return userService.authenticatedCurrentUser();
+    }
+
+    /**
      * Method that gets all users
      *
      * @return all {@link User}
