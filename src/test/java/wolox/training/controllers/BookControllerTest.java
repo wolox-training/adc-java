@@ -59,7 +59,7 @@ class BookControllerTest {
 
     @Test
     void whenFindAll_thenReturnAllBooks() throws Exception {
-        when(bookService.findAll()).thenReturn(Collections.singleton(bookTest));
+        when(bookService.findAll(any())).thenReturn(Collections.singleton(bookTest));
         mockMvc.perform(get(BOOK_PATH)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON_VALUE))

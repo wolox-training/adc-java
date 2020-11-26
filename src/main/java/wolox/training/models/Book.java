@@ -31,8 +31,6 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
-    @NotNull
-    @Column(nullable = false)
     @ApiModelProperty(example = "Horror")
     private String genre;
 
