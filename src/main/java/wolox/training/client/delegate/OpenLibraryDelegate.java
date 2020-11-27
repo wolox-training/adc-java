@@ -29,11 +29,7 @@ public class OpenLibraryDelegate {
         HashMap<String, Object> bookInfoResponse = openLibraryFeignClient
                 .findBookByIsbn(new BooksParam(isbnParam.toString()));
 
-        if (!bookInfoResponse.isEmpty()) {
-            return Optional.ofNullable(objectMapper
-                    .convertValue(bookInfoResponse.get(isbnParam.toString()), BookInfoDto.class));
-        }
-
-        return Optional.empty();
+        return Optional.ofNullable(bookInfoResponse.get(isbnParam.toString()))
+                .map(bookInfo -> objectMapper.convertValue(bookInfo, BookInfoDto.class));
     }
 }
