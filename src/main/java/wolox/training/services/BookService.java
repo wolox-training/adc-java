@@ -12,6 +12,7 @@ import wolox.training.repositories.BookRepository;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -56,15 +57,16 @@ public class BookService {
 
 
     private Iterable<Book> filterBookByIsbn(String isbn) {
-        Optional<Book> bookOptional = bookRepository.findByIsbn(isbn);
-        if (bookOptional.isPresent()) {
-            return Collections.singleton(bookOptional.get());
-        }
+        return bookRepository.findByIsbn(isbn)
+                .map(book -> Collections.singleton(book))
+                .orElseGet(() -> (Set<Book>) getOpenLibraryBook(isbn));
+    }
 
+    private Iterable<Book> getOpenLibraryBook(String isbn) {
         Book bookFound = openLibraryDelegate.findBookByIsbn(isbn)
                 .map(bookInfoDto -> bookMapper.bookInfoDtoToToEntity(isbn, bookInfoDto))
                 .orElseThrow(BookNotFoundException::new);
-
-        return Collections.singleton(bookRepository.save(bookFound));
+        bookRepository.save(bookFound);
+        return Collections.singleton(bookFound);
     }
 }
