@@ -22,11 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
+import wolox.training.security.AuthenticationProvider;
 import wolox.training.services.UserService;
 
 @WebMvcTest(UserController.class)
@@ -40,6 +43,10 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+    @MockBean
+    private AuthenticationProvider authenticationProvider;
+    @MockBean
+    private PasswordEncoder passwordEncoder;
     private ObjectMapper objectMapper;
     private User userTest;
 
@@ -53,6 +60,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenFindAll_thenReturnAllUsers() throws Exception {
         when(userService.findAll()).thenReturn(Collections.singleton(userTest));
         mockMvc.perform(get(USER_PATH)
@@ -64,6 +72,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenFindById_thenReturnUser() throws Exception {
         when(userService.findById(any())).thenReturn(userTest);
         mockMvc.perform(get(USER_PATH + "/{id}", USER_ID)
@@ -75,6 +84,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenDelete_thenReturnIsOk() throws Exception {
         when(userService.findById(any())).thenReturn(userTest);
         doNothing().when(userService).delete(any());
