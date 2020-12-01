@@ -9,6 +9,7 @@ import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.exceptions.UserOldPasswordMismatchException;
 import wolox.training.models.Book;
+import wolox.training.models.CurrentUser;
 import wolox.training.models.PasswordReset;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
@@ -29,8 +30,8 @@ public class UserService {
     @Autowired
     private IAuthentication authentication;
 
-    public String authenticatedCurrentUser() {
-        return authentication.getAuthentication().getName();
+    public CurrentUser authenticatedCurrentUser() {
+        return new CurrentUser(authentication.getAuthentication().getName());
     }
 
     public Iterable<User> findAll() {

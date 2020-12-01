@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.models.Book;
+import wolox.training.models.CurrentUser;
 import wolox.training.models.PasswordReset;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
@@ -27,7 +28,7 @@ public class UserController {
      * @return username (String)
      */
     @GetMapping("/me")
-    public String authenticatedCurrentUser() {
+    public CurrentUser authenticatedCurrentUser() {
         return userService.authenticatedCurrentUser();
     }
 
