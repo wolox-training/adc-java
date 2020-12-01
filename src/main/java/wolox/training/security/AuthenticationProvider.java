@@ -18,9 +18,8 @@ public class AuthenticationProvider implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        wolox.training.models.User userFound = userRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
+                .map(userFound -> new User(userFound.getUsername(), userFound.getPassword(), Collections.emptyList()))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return new User(userFound.getUsername(), userFound.getPassword(), Collections.emptyList());
     }
 }
