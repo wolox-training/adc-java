@@ -22,9 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
+import wolox.training.security.AuthenticationProvider;
 import wolox.training.services.BookService;
 
 @WebMvcTest(BookController.class)
@@ -38,6 +41,10 @@ class BookControllerTest {
 
     @MockBean
     private BookService bookService;
+    @MockBean
+    private AuthenticationProvider authenticationProvider;
+    @MockBean
+    private PasswordEncoder passwordEncoder;
     private ObjectMapper objectMapper;
     private Book bookTest;
 
@@ -58,6 +65,7 @@ class BookControllerTest {
 
 
     @Test
+    @WithMockUser
     void whenFindAll_thenReturnAllBooks() throws Exception {
         when(bookService.findAll()).thenReturn(Collections.singleton(bookTest));
         mockMvc.perform(get(BOOK_PATH)
@@ -72,6 +80,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenFindById_thenReturnBook() throws Exception {
         when(bookService.findById(any())).thenReturn(bookTest);
         mockMvc.perform(get(BOOK_PATH + "/{id}", BOOK_ID)
@@ -86,6 +95,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenFindById_thenReturnNotFound() throws Exception {
         when(bookService.findById(any())).thenThrow(BookNotFoundException.class);
         mockMvc.perform(get(BOOK_PATH + "/{id}", BOOK_ID)
@@ -95,6 +105,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenSave_thenReturnSavedBook() throws Exception {
         when(bookService.save(any())).thenReturn(bookTest);
         mockMvc.perform(post(BOOK_PATH)
@@ -110,6 +121,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenUpdate_thenReturnUpdatedBook() throws Exception {
         when(bookService.update(any(), any())).thenReturn(bookTest);
         mockMvc.perform(put(BOOK_PATH + "/{id}", BOOK_ID)
@@ -125,6 +137,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenUpdate_thenReturnNotFound() throws Exception {
         when(bookService.update(any(), any())).thenThrow(BookNotFoundException.class);
         mockMvc.perform(put(BOOK_PATH + "/{id}", BOOK_ID)
@@ -135,6 +148,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenDelete_thenReturnIsOk() throws Exception {
         doNothing().when(bookService).delete(any());
         mockMvc.perform(delete(BOOK_PATH + "/{id}", BOOK_ID)
@@ -144,6 +158,7 @@ class BookControllerTest {
     }
 
     @Test
+    @WithMockUser
     void whenDelete_thenReturnNotFound() throws Exception {
         doThrow(BookNotFoundException.class).when(bookService).delete(any());
         mockMvc.perform(delete(BOOK_PATH + "/{id}", BOOK_ID)
