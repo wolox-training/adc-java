@@ -82,6 +82,17 @@ class BookRepositoryTest {
 
     @Test
     void whenFindByGenreAndPublisherAndYear_thenReturnBookList() {
+        List<Book> books = bookRepository
+                .findByGenreAndPublisherAndYear(HORROR_GENRE, DEFAULT_PUBLISHER, DEFAULT_YEAR);
+
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+        assertThat(books.get(0).getGenre()).isEqualTo(HORROR_GENRE);
+        assertThat(books.get(0).getPublisher()).isEqualTo(DEFAULT_PUBLISHER);
+        assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
+    }
+
+    private void beforeFindByGenreAndPublisherAndYear() {
         bookToSave = new Book();
         bookToSave.setGenre("SUSPENSE");
         bookToSave.setAuthor(DEFAULT_AUTHOR);
@@ -94,15 +105,6 @@ class BookRepositoryTest {
         bookToSave.setIsbn("0909-1234-6710-X");
 
         bookRepository.save(bookToSave);
-
-        List<Book> books = bookRepository
-                .findByGenreAndPublisherAndYear(HORROR_GENRE, DEFAULT_PUBLISHER, DEFAULT_YEAR);
-
-        assertThat(books.isEmpty()).isFalse();
-        assertThat(books.size()).isEqualTo(1);
-        assertThat(books.get(0).getGenre()).isEqualTo(HORROR_GENRE);
-        assertThat(books.get(0).getPublisher()).isEqualTo(DEFAULT_PUBLISHER);
-        assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
     }
 
 }
