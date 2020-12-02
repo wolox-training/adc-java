@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookIdMismatchException;
@@ -34,12 +37,13 @@ public class BookService {
     private ObjectMapper objectMapper;
 
     public Iterable<Book> findAll(Map<String,String> params) {
-        if (params.size() == 0) return bookRepository.findAll();
+        Pageable pageable = getPageFromMap(params);
+        if (params.size() == 0) return bookRepository.findAll(pageable);
         Book bookToFind = objectMapper.convertValue(params, Book.class);
         if (StringUtils.isNotEmpty(bookToFind.getIsbn())) filterBookByIsbn(bookToFind.getIsbn());
         ExampleMatcher customExampleMatcher = ExampleMatcher.matchingAny();
         Example<Book> example = Example.of(bookToFind, customExampleMatcher);
-        return bookRepository.findAll(example);
+        return bookRepository.findAll(example, pageable);
     }
 
     public Book findById(Long id) {
@@ -77,5 +81,13 @@ public class BookService {
                 .orElseThrow(BookNotFoundException::new);
         bookRepository.save(bookFound);
         return Collections.singleton(bookFound);
+    }
+
+    private Pageable getPageFromMap(Map<String,String> params) {
+        int page = Integer.parseInt(params.getOrDefault("page", "0"));
+        int size = Integer.parseInt(params.getOrDefault("size", "5"));
+        String sort = params.getOrDefault("sort", "id");
+        params.remove("page"); params.remove("size"); params.remove("sort");
+        return PageRequest.of(page, size, Sort.by(sort));
     }
 }
