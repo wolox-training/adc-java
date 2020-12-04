@@ -21,6 +21,8 @@ import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 import wolox.training.services.BookService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -38,8 +40,8 @@ public class BookController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved all books")
     })
-    public Iterable findAll(@RequestParam(required = false) String isbn) {
-        return bookService.findAll(isbn);
+    public Iterable findAll(@RequestParam Map<String,String> params) {
+        return bookService.findAll(params);
     }
 
     /**
