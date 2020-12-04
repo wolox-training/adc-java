@@ -18,6 +18,7 @@ class UserRepositoryTest {
 
     private static final String USERNAME = "test.username";
     private static final String PASSWORD = "WeRtYuIo++";
+    private static final String NAME = "Gerardo Antonio";
 
     private User userToSave;
 
@@ -92,16 +93,7 @@ class UserRepositoryTest {
 
     @Test
     void whenFindBetweenTwoDate_thenReturnUserList() {
-
-        String name = "Gerardo Antonio";
-
-        userToSave = new User();
-        userToSave.setUsername(USERNAME);
-        userToSave.setName(name);
-        userToSave.setPassword(PASSWORD);
-        userToSave.setBirthdate(LocalDate.now().minusDays(3));
-
-        userRepository.save(userToSave);
+        beforeFindBetweenTwoDate();
 
         List<User> users = userRepository
                 .findByBirthdateLessThanEqualAndBirthdateGreaterThanEqualAndNameContainingIgnoreCase(
@@ -109,29 +101,18 @@ class UserRepositoryTest {
 
         assertThat(users.isEmpty()).isFalse();
         assertThat(users.size()).isEqualTo(1);
-        assertThat(users.get(0).getName()).isEqualTo(name);
+        assertThat(users.get(0).getName()).isEqualTo(NAME);
         assertThat(users.get(0).getUsername()).isEqualTo(userToSave.getUsername());
     }
 
-    @Test
-    void whenFindBetweenTwoDateCustom_thenReturnUserList() {
-        String name = "Gerardo Antonio";
-
+    private void beforeFindBetweenTwoDate() {
         userToSave = new User();
         userToSave.setUsername(USERNAME);
-        userToSave.setName(name);
+        userToSave.setName(NAME);
         userToSave.setPassword(PASSWORD);
         userToSave.setBirthdate(LocalDate.now().minusDays(3));
 
         userRepository.save(userToSave);
-
-        List<User> users = userRepository
-                .findByBirthdateBetweenTwoDateAndNameCustom(
-                        LocalDate.now(), LocalDate.now().minusDays(5), "gerar");
-
-        assertThat(users.isEmpty()).isFalse();
-        assertThat(users.size()).isEqualTo(1);
-        assertThat(users.get(0).getName()).isEqualTo(name);
-        assertThat(users.get(0).getUsername()).isEqualTo(userToSave.getUsername());
     }
+
 }
