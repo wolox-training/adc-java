@@ -1,10 +1,7 @@
 package wolox.training.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import wolox.training.client.delegate.OpenLibraryDelegate;
 import wolox.training.exceptions.BookIdMismatchException;
@@ -14,7 +11,6 @@ import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,16 +26,11 @@ public class BookService {
     @Autowired
     private BookMapper bookMapper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    public Iterable<Book> findAll(Map<String,String> params) {
-        if (params.size() == 0) return bookRepository.findAll();
-        Book bookToFind = objectMapper.convertValue(params, Book.class);
-        if (StringUtils.isNotEmpty(bookToFind.getIsbn())) filterBookByIsbn(bookToFind.getIsbn());
-        ExampleMatcher customExampleMatcher = ExampleMatcher.matchingAny();
-        Example<Book> example = Example.of(bookToFind, customExampleMatcher);
-        return bookRepository.findAll(example);
+    public Iterable<Book> findAll(String isbn) {
+        if (StringUtils.isNotEmpty(isbn)) {
+            return filterBookByIsbn(isbn);
+        }
+        return bookRepository.findAll();
     }
 
     public Book findById(Long id) {
