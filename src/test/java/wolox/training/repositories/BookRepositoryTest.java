@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import wolox.training.models.Book;
 
+import java.util.List;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 class BookRepositoryTest {
@@ -74,6 +76,35 @@ class BookRepositoryTest {
         bookRepository.delete(bookFound);
         Iterable<Book> books = bookRepository.findAll();
         assertThat(books.iterator().hasNext()).isFalse();
+    }
+
+
+
+    @Test
+    void whenFindByGenreAndPublisherAndYear_thenReturnBookList() {
+        List<Book> books = bookRepository
+                .findByGenreAndPublisherAndYear(HORROR_GENRE, DEFAULT_PUBLISHER, DEFAULT_YEAR);
+
+        assertThat(books.isEmpty()).isFalse();
+        assertThat(books.size()).isEqualTo(1);
+        assertThat(books.get(0).getGenre()).isEqualTo(HORROR_GENRE);
+        assertThat(books.get(0).getPublisher()).isEqualTo(DEFAULT_PUBLISHER);
+        assertThat(books.get(0).getYear()).isEqualTo(DEFAULT_YEAR);
+    }
+
+    private void beforeFindByGenreAndPublisherAndYear() {
+        bookToSave = new Book();
+        bookToSave.setGenre("SUSPENSE");
+        bookToSave.setAuthor(DEFAULT_AUTHOR);
+        bookToSave.setImage("horror.jpg");
+        bookToSave.setTitle("Title");
+        bookToSave.setSubtitle("Subtitle");
+        bookToSave.setPublisher(DEFAULT_PUBLISHER);
+        bookToSave.setYear(DEFAULT_YEAR);
+        bookToSave.setPages(PAGE_NUMBER);
+        bookToSave.setIsbn("0909-1234-6710-X");
+
+        bookRepository.save(bookToSave);
     }
 
 }
